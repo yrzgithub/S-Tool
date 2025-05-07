@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: bookingremark
+  profiles:
+    active: core, amadeus, ${SPRING_PROFILE:dev}
+logging:
+  file:
+    name: /data/logs/application/BookingRemark_RS.log
+  level:
+    com.qantas: TRACE
+#    org.springframework.web: DEBUG
+#    org.springframework.ws.client.MessageTracing.sent: TRACE
+#    org.springframework.ws.server.MessageTracing.sent: TRACE
+#    org.springframework.ws.client.MessageTracing.received: TRACE
+#    org.springframework.ws.server.MessageTracing.received: TRACE
+#    com.sun.xml.internal.ws: TRACE
+#    com.sun.xml.ws: TRACE
+---
+spring:
+  profiles: dev, nonprod, prod
+logbook:
+  write:
+    max-body-size: 3000
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 10
+        sleepWindowInMilliseconds: 15000
+      metrics.rollingStats:
+        timeInMilliseconds: 10000
+      execution.isolation:
+        thread.timeoutInMilliseconds: 60000

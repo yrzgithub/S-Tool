@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration [
+  <!ENTITY xxe SYSTEM "seenusanjay20102002@gmail.com"> <!-- Line 3: Potential XXE payload -->
+]>
+<configuration>
+    <user>&xxe;</user> <!-- Reference to the external entity -->
+    <setting>value</setting>
+</configuration>

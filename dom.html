@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting App</title>
+</head>
+<body onload="displayGreeting()">
+
+    <h1>Welcome!</h1>
+    <div id="greeting"></div>
+
+    <script>
+        function displayGreeting() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('name'); // Get 'name' parameter from URL
+            const greetingElement = document.getElementById('greeting');
+            greetingElement.innerHTML = `Hello, ${name}!`; // Line 14: DOM-based XSS
+        }
+    </script>
+
+</body>
+</html>
