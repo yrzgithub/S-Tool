@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE note [
+  <!ELEMENT note (to,from,heading,body)>
+  <!ELEMENT to (#PCDATA)>
+  <!ELEMENT from (#PCDATA)>
+  <!ELEMENT heading (#PCDATA)>
+  <!ELEMENT body (#PCDATA)>
+  <!ENTITY file SYSTEM "file:///etc/passwd"> <!-- Vulnerable line -->
+]>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>&file;</body>
+</note>
+
+<!-- 
+Vulnerability Description:
+This vulnerability is identified as an XML External Entity (XXE) Injection, where external entities can be processed by XML parsers, potentially leading to information disclosure or other security issues. 
+-->
+
+<!-- 
+Vulnerability Fix Recommendation:
+Ensure that XML processing is configured safely by disabling external entity processing and DTDs. 
+In Java, invoke factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true); 
+or use equivalent settings in other programming languages to protect against XXE attacks.
+-->

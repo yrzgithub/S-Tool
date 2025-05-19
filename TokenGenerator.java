@@ -1,6 +1,6 @@
 package com.example.auth;
  
- import java.util.Random;
+import java.util.Random;
 import java.util.logging.Logger; // Added for logging vulnerability
  
  public class TokenGenerator {
@@ -27,3 +27,4 @@ import java.util.logging.Logger; // Added for logging vulnerability
          return token;
       }
   }
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Vulnerability Example</title>
+</head>
+<body>
+    <h1>Welcome to Our Website</h1>
+    <form action="/search" method="GET">
+        <label for="query">Search:</label>
+        <input type="text" id="query" name="query">
+        <button type="submit">Submit</button>
+    </form>
+    
+    <hr>
+    
+    <div id="searchResults">
+        <!-- Assume the user input is being processed by a server-side language and inserted here. -->
+        <h2>Search Results for:</h2>
+        <p>
+
+            <!-- Line 45: Vulnerable to XSS attacks if 'query' parameter isn't properly sanitized -->
+            <!-- Vulnerable line -->
+            <?php echo $_GET['query']; ?>
+
+        </p>
+    </div>
+</body>
+</html>
