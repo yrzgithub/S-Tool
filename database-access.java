@@ -1,9 +1,30 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SQLInjectionExample {
+
+    
+    public class DatabaseAccess {
+    
+        public static String getPreparedStatement(String username) throws SQLException {
+            String query = null;
+            try (Connection connection = DatabaseConnection.getConnection(); // Assumed function to get database connection
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE username = ?")) {
+                statement.setString(1, username);
+                //  Should not directly build the query string here.
+                //Instead, use the PreparedStatement object to execute the query
+                // to prevent SQL injection.
+                //query = statement.toString(); // this is not necessary. 
+                return statement.toString();
+            } catch (SQLException e) {
+                throw new SQLException("Failed to create prepared statement: " + e.getMessage(), e);
+            }
+        }
+    }
 
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/mydatabase";
@@ -18,7 +39,7 @@ public class SQLInjectionExample {
             Statement statement = connection.createStatement();
 
             // Vulnerable line - Line 45: SQL Injection vulnerability
-            String query = "SELECT * FROM users WHERE username = '" + userInput + "'";
+            String query = getPreparedStatement(userInput);
 
             ResultSet resultSet = statement.executeQuery(query);  // This line executes the query
 

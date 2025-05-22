@@ -5,7 +5,7 @@
   <!ELEMENT from (#PCDATA)>
   <!ELEMENT heading (#PCDATA)>
   <!ELEMENT body (#PCDATA)>
-  <!ENTITY file SYSTEM "file:///etc/passwd"> <!-- Vulnerable line -->
+  <!-- Entity declarations are disabled for security -->
 ]>
 <note>
   <to>Tove</to>

@@ -20,7 +20,13 @@ public class XMLParser {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             
             // Vulnerable: External entities are not disabled, risking an XXE attack
-            DocumentBuilder builder = factory.newDocumentBuilder(); // Line 45
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
             InputSource is = new InputSource(new StringReader(xmlData));
             Document document = builder.parse(is);

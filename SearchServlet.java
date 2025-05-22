@@ -16,12 +16,22 @@ import java.nio.file.Paths;
           String query = request.getParameter("query");
           response.setContentType("text/html");
           PrintWriter out = response.getWriter();
-         out.println("<html><body><h1>Search Results for: " + query + "</h1></body></html>"); // Line 13: Reflected XSS
+         String sanitizedQuery = org.owasp.esapi.ESAPI.encoder().encodeForHTML(query);
+         out.println("<html><body><h1>Search Results for: " + sanitizedQuery + "</h1></body></html>");
 
          // Vulnerability 2 (New): SQL Injection (Simulated)
-         String sqlQuery = "SELECT * FROM products WHERE name = '"  + query + "'";
+         PreparedStatement statement = connection.prepareStatement("SELECT * FROM products WHERE name = ?");
+         statement.setString(1, query);
          String filePath = "/var/www/data/" +  query; // Using user input directly in a path
-         out.println("<p>Attempting to access file (unsafe): " +  filePath +  "</p>");
+         String canonicalPath = Paths.get(basePath, filePath).normalize().toAbsolutePath().toString();
+         String safeFilePath = canonicalPath.startsWith(basePath) ? canonicalPath : null;
+         if (safeFilePath != null) {
+         out.println("<p>Attempting to access file: " + safeFilePath + "</p>");
+         // Proceed with file access using safeFilePath
+         } else {
+         out.println("<p>Invalid file path requested.</p>");
+         // Handle invalid path appropriately, e.g., log the event and return an error
+         }
          // In a real scenario, code might try to read this file, e.g., using Files.readString(Paths.get(filePath))
 
          out.println("</body></html>");

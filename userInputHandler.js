@@ -27,7 +27,7 @@ app.post('/submit', (req, res) => {
 
   // Vulnerable line: Displaying user input directly without sanitization
   // This is the line number 42, which is vulnerable to XSS attack
-  res.send(`<h1>Welcome, ${username}!</h1>`);
+  res.send(`<h1>Welcome, ${escapeHtml(username)}!</h1>`);
 
   // Note: If an attacker submits a "<script>" tag as the username, it will execute.
 });

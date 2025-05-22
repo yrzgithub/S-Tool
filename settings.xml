@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE example [
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import java.io.IOException;
   <!ELEMENT example ANY >
-  <!ENTITY xxe SYSTEM "file:///etc/passwd" >  <!-- Vulnerable to XXE -->
+  <!-- XML External Entities (XXE) are disabled for security -->
 ]>
 <example>
   <data>&xxe;</data>

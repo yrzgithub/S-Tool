@@ -1,5 +1,6 @@
 // main.go
 package main
+import "golang.org/x/crypto/bcrypt"
 
 import (
 	"crypto/sha1" // Vulnerable: SHA-1 is considered weak for hashing passwords
@@ -16,7 +17,13 @@ import (
 
 func hashPassword(password string) string {
 	// Vulnerable line - Weak password storage using SHA-1 hash algorithm
-	hash := sha1.New() // line 88
+ 
+ cost := bcrypt.DefaultCost
+ bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
+ if err != nil {
+ 	// Handle error
+ }
+ hashedPassword := string(bytes)
 
 	hash.Write([]byte(password))
 	return hex.EncodeToString(hash.Sum(nil))

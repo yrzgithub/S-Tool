@@ -20,7 +20,27 @@ public class LdapInjectionExample {
 
             // Vulnerable: Directly embedding user input into LDAP query
             // Line 42
-            String searchFilter = "(&(objectClass=user)(uid=" + username + "))";
+            javax.naming.directory.Attributes attributes = null;
+                    try (javax.naming.directory.DirContext ctx = new javax.naming.directory.InitialDirContext(env)) {
+                        javax.naming.directory.SearchControls controls = new javax.naming.directory.SearchControls();
+                        controls.setSearchScope(javax.naming.directory.SearchControls.SUBTREE_SCOPE);
+                        String[] attrIDs = { "uid" };
+                        controls.setReturningAttributes(attrIDs);
+                        String base = "dc=example,dc=com"; // Replace with your LDAP base DN
+                        String filter = "(objectClass=user)";
+                        NamingEnumeration<SearchResult> results = ctx.search(base, filter, controls);
+                        while (results.hasMore()) {
+                            SearchResult result = results.next();
+                            attributes = result.getAttributes();
+                            if(attributes.get("uid").get().equals(username)){
+                                break;
+                            }
+                        }
+                    } catch (NamingException e) {
+                        throw new RuntimeException("LDAP search failed", e);
+                    } finally{
+                        //No cleanup needed for this approach
+                    }
 
             SearchControls searchControls = new SearchControls();
             searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);

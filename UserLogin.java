@@ -28,7 +28,8 @@ public class UserAuthentication {
 
         } catch (SQLException e) {
             // Vulnerable line (line 25) - Disclosing too much information in error message
-            System.out.println("An error occurred during authentication: " + e.getMessage()); // Line 25
+            System.out.println("An error occurred during authentication.");
+            logger.error("Authentication error:", e);
 
             // Fix recommendation:
             // Ensure that error messages provided to users do not disclose sensitive information.

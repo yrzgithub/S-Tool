@@ -8,7 +8,7 @@ public class UserAuthentication {
     public String hashPassword(String password) {
         // Vulnerable line using MD5 for hashing
         // Vulnerability: Weak Password Hashing Algorithm
-        String passwordHash = md5Hash(password);
+        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
         return passwordHash;
     }
     
